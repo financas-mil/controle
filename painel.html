@@ -1053,11 +1053,11 @@
                     <select id="transacao-categoria" class="modal-input" style="padding-left:14px;" required>
                         <option value="" disabled selected>Selecione uma categoria</option>
                         <option value="🏠 Moradia">🏠 Moradia</option>
-			<option value="🛒 Supermercado">🛒 Supermercado</option>
+                        <option value="🛒 Supermercado">🛒 Supermercado</option>
                         <option value="🍔 Alimentação">🍔 Alimentação</option>
                         <option value="🚗 Transporte">🚗 Transporte</option>
                         <option value="💊 Saúde">💊 Saúde</option>
-			<option value="🏋️ Academia">🏋️ Academia</option>
+                        <option value="🏋️ Academia">🏋️ Academia</option>
                         <option value="📚 Educação">📚 Educação</option>
                         <option value="🎮 Lazer">🎮 Lazer</option>
                         <option value="👕 Vestuário">👕 Vestuário</option>
@@ -1071,9 +1071,9 @@
                         <option value="💅 Beleza e Cuidados">💅 Beleza e Cuidados</option>
                         <option value="📺 Streaming/Apps">📺 Streaming/Apps</option>
                         <option value="💵 Salario">💵 Salario</option>
-			<option value="🎄 13ºSalario">🎄 13ºSalario</option>
-			<option value="🍽️ Vale Refeição"> 🍽️ Vale Refeição</option>
-			<option value="🥗 Vale Alimentação">🥗 Vale Alimentação</option>
+                        <option value="🎄 13ºSalario">🎄 13ºSalario</option>
+                        <option value="🍽️ Vale Refeição"> 🍽️ Vale Refeição</option>
+                        <option value="🥗 Vale Alimentação">🥗 Vale Alimentação</option>
                         <option value="📋 Dívidas">📋 Dívidas</option>
                         <option value="📦 Outros">📦 Outros</option>
                     </select>
@@ -2428,10 +2428,11 @@
         function alternarMenuDropdown(e) { e.stopPropagation(); document.getElementById('menu-usuario-dropdown').classList.toggle('active'); }
         function fecharDropdown() { document.getElementById('menu-usuario-dropdown').classList.remove('active'); }
         
+        // --- FUNÇÃO CORRIGIDA DE LOGOUT ---
         function fazerLogoutReal() {
             sessionStorage.removeItem('financas_mil_auth');
-            alert("Sessão encerrada.");
-            location.reload();
+            // Redireciona corretamente para a página de login
+            window.location.href = "index.html";
         }
 
         function limparTodosDados() { 
