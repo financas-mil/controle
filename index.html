@@ -1,0 +1,457 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login Premium - Finanças MIL</title>
+    
+    <!-- Configurações PWA e Ícones Mobile -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Finanças Mil">
+    <meta name="theme-color" content="#030712">
+    <link rel="manifest" href="manifest.json">
+    
+    <!-- Ícone da Aba do Navegador (Favicon) e Apple Touch -->
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'><defs><linearGradient id='bg' x1='0%' y1='0%' x2='100%' y2='100%'><stop offset='0%' stop-color='%23030712'/><stop offset='100%' stop-color='%23101c36'/></linearGradient></defs><rect width='512' height='512' rx='110' fill='url(%23bg)'/><text x='50%' y='55%' dominant-baseline='middle' text-anchor='middle' fill='%2300f0ff' font-size='280' font-family='Outfit, sans-serif' font-weight='bold'>F</text></svg>">
+    <link rel="apple-touch-icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'><rect width='512' height='512' rx='110' fill='%23030712'/><text x='50%' y='55%' dominant-baseline='middle' text-anchor='middle' fill='%2300f0ff' font-size='260' font-family='Outfit, sans-serif' font-weight='bold'>F</text></svg>">
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        :root {
+            --bg-dark: #030712;
+            --neon-cyan: #00f0ff;
+            --neon-purple: #7c3aed;
+            --glass-bg: rgba(15, 23, 42, 0.4);
+            --glass-border: rgba(255, 255, 255, 0.08);
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+            --input-bg: rgba(0, 0, 0, 0.3);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Outfit', sans-serif; -webkit-font-smoothing: antialiased; }
+        
+        body { 
+            background-color: var(--bg-dark); 
+            display: flex; align-items: center; justify-content: center; 
+            min-height: 100vh; padding: 15px; 
+            overflow: hidden;
+            position: relative;
+        }
+
+        /* --- BACKGROUND ANIMADO (ORBS) --- */
+        .ambient-orb {
+            position: absolute; border-radius: 50%;
+            filter: blur(100px); opacity: 0.4;
+            animation: floatOrb 12s infinite alternate ease-in-out;
+            z-index: 0; pointer-events: none;
+        }
+        .orb-1 { width: 40vw; height: 40vw; background: var(--neon-cyan); top: -10%; left: -10%; animation-delay: 0s; }
+        .orb-2 { width: 35vw; height: 35vw; background: var(--neon-purple); bottom: -10%; right: -10%; animation-delay: -5s; }
+
+        @keyframes floatOrb {
+            0% { transform: translate(0, 0) scale(1); }
+            100% { transform: translate(10%, 15%) scale(1.1); }
+        }
+
+        /* --- GLASSMORPHISM CARD COM SCROLL OTIMIZADO --- */
+        .login-card {
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            border-radius: 24px; padding: 35px 30px;
+            width: 100%; max-width: 440px; 
+            box-shadow: 0 30px 60px -15px rgba(0, 0, 0, 0.8), inset 0 1px 0 rgba(255,255,255,0.1);
+            position: relative; z-index: 10;
+            display: none;
+            max-height: calc(100vh - 30px);
+            overflow-y: auto;
+            overflow-x: hidden;
+        }
+
+        .login-card::-webkit-scrollbar { width: 6px; }
+        .login-card::-webkit-scrollbar-track { background: transparent; margin: 15px 0; }
+        .login-card::-webkit-scrollbar-thumb { background: rgba(0, 240, 255, 0.2); border-radius: 10px; }
+        .login-card::-webkit-scrollbar-thumb:hover { background: rgba(0, 240, 255, 0.5); }
+
+        .login-card.active { display: block; animation: slideUpFade 0.5s cubic-bezier(0.16, 1, 0.3, 1); }
+        
+        @keyframes slideUpFade { 
+            from { opacity: 0; transform: translateY(20px) scale(0.98); } 
+            to { opacity: 1; transform: translateY(0) scale(1); } 
+        }
+
+        /* --- HEADER & LOGO --- */
+        .login-header-logo { display: flex; align-items: center; justify-content: center; gap: 14px; margin-bottom: 10px; }
+        .logo-premium-icon { 
+            width: 46px; height: 46px; border-radius: 16px; 
+            background: linear-gradient(135deg, var(--bg-dark), rgba(124, 58, 237, 0.2)); 
+            border: 1px solid rgba(0, 240, 255, 0.3);
+            display: flex; align-items: center; justify-content: center; 
+            box-shadow: 0 0 20px rgba(0, 240, 255, 0.2);
+        }
+        .login-header-logo .logo-premium-text { font-size: 26px; font-weight: 800; color: var(--text-main); letter-spacing: -0.5px; }
+        .logo-premium-text span { 
+            background: linear-gradient(90deg, var(--neon-cyan), var(--neon-purple));
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent; 
+        }
+        .login-subtitle { text-align: center; color: var(--text-muted); font-size: 14px; margin-bottom: 25px; font-weight: 400; }
+
+        /* --- FORMS & INPUTS --- */
+        .login-form-group { margin-bottom: 16px; }
+        .login-form-group label { display: block; font-size: 11px; font-weight: 700; color: var(--text-muted); margin-bottom: 6px; text-transform: uppercase; letter-spacing: 1px; }
+
+        .login-input-wrapper { position: relative; display: flex; align-items: center; transition: 0.3s; }
+        .login-input-wrapper i.icon-left { position: absolute; left: 18px; color: #475569; font-size: 15px; transition: 0.3s; }
+        .login-input-wrapper i.icon-right { position: absolute; right: 18px; color: #475569; font-size: 15px; cursor: pointer; transition: 0.3s; }
+        
+        .login-input-wrapper:focus-within i.icon-left, 
+        .login-input-wrapper i.icon-right:hover { color: var(--neon-cyan); }
+
+        .login-input {
+            width: 100%; background-color: var(--input-bg); 
+            border: 1px solid var(--glass-border);
+            border-radius: 14px; padding: 13px 40px 13px 44px; 
+            font-size: 14px; color: var(--text-main); font-weight: 500;
+            outline: none; transition: all 0.3s ease;
+        }
+        .login-input:focus { 
+            border-color: rgba(0, 240, 255, 0.5); 
+            box-shadow: 0 0 15px rgba(0, 240, 255, 0.1), inset 0 0 10px rgba(0, 240, 255, 0.05); 
+            background-color: rgba(0, 0, 0, 0.5);
+        }
+        .login-input::placeholder { color: #475569; font-weight: 400; }
+
+        .login-options { display: flex; justify-content: flex-end; margin-top: -8px; margin-bottom: 24px; }
+        .login-link { color: var(--neon-cyan); font-size: 13px; font-weight: 600; text-decoration: none; cursor: pointer; transition: 0.2s; }
+        .login-link:hover { color: #fff; text-shadow: 0 0 8px var(--neon-cyan); }
+
+        /* --- BOTÕES --- */
+        .btn-login-submit {
+            width: 100%; 
+            background: linear-gradient(135deg, var(--neon-cyan), var(--neon-purple));
+            color: #fff; font-weight: 800; font-size: 14px; border: none;
+            border-radius: 14px; padding: 15px; cursor: pointer; transition: all 0.3s ease;
+            text-transform: uppercase; letter-spacing: 1.5px;
+            box-shadow: 0 8px 25px rgba(124, 58, 237, 0.3); margin-bottom: 20px;
+            position: relative; overflow: hidden;
+        }
+        .btn-login-submit::before {
+            content: ''; position: absolute; top: 0; left: -100%; width: 100%; height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: 0.5s;
+        }
+        .btn-login-submit:hover { transform: translateY(-2px); box-shadow: 0 12px 30px rgba(0, 240, 255, 0.4); }
+        .btn-login-submit:hover::before { left: 100%; }
+
+        .login-footer-text { text-align: center; color: var(--text-muted); font-size: 13px; font-weight: 500; }
+
+        /* --- CHECKBOX E FORÇA DA SENHA --- */
+        .checkbox-group { display: flex; align-items: flex-start; gap: 10px; margin-bottom: 14px; }
+        .checkbox-group input[type="checkbox"] { margin-top: 2px; accent-color: var(--neon-cyan); width: 16px; height: 16px; cursor: pointer; }
+        .checkbox-group label { font-size: 12px; color: var(--text-muted); line-height: 1.4; font-weight: 400; cursor: pointer; }
+        .checkbox-group label a { color: var(--neon-cyan); text-decoration: none; font-weight: 600; cursor: pointer; }
+        .checkbox-group label a:hover { text-decoration: underline; }
+
+        .forca-senha-container { margin-top: 8px; display: none; }
+        .forca-senha-bar { height: 4px; background: rgba(255,255,255,0.1); border-radius: 4px; overflow: hidden; }
+        .forca-senha-fill { height: 100%; width: 0%; transition: 0.4s ease-out; border-radius: 4px; }
+        .forca-senha-texto { font-size: 10px; margin-top: 4px; font-weight: 700; letter-spacing: 0.5px; }
+
+        /* --- MENSAGENS --- */
+        .login-erro-msg, .login-sucesso-msg { 
+            font-size: 13px; font-weight: 600; text-align: center; margin-bottom: 16px; display: none; 
+            padding: 10px; border-radius: 10px; backdrop-filter: blur(5px);
+            animation: slideUpFade 0.3s ease;
+        }
+        .login-erro-msg { color: #fca5a5; background: rgba(239, 68, 68, 0.15); border: 1px solid rgba(239, 68, 68, 0.3); }
+        .login-sucesso-msg { color: #6ee7b7; background: rgba(16, 185, 129, 0.15); border: 1px solid rgba(16, 185, 129, 0.3); }
+    </style>
+</head>
+<body>
+
+    <!-- ORBS DE FUNDO AMBIENTE -->
+    <div class="ambient-orb orb-1"></div>
+    <div class="ambient-orb orb-2"></div>
+
+    <!-- 1. TELA DE LOGIN -->
+    <div id="card-login" class="login-card">
+        <div class="login-header-logo">
+            <div class="logo-premium-icon"><i class="fa-solid fa-chart-line" style="color: var(--neon-cyan); font-size: 20px;"></i></div>
+            <div class="logo-premium-text">Finanças <span>MIL</span></div>
+        </div>
+        <div class="login-subtitle">Acesse sua inteligência patrimonial</div>
+
+        <div id="msg-erro-login" class="login-erro-msg">E-mail ou senha incorretos.</div>
+        <div id="msg-sucesso-login" class="login-sucesso-msg"></div>
+
+        <div class="login-form-group">
+            <label>E-mail Institucional ou Pessoal</label>
+            <div class="login-input-wrapper">
+                <i class="fa-regular fa-envelope icon-left"></i>
+                <input type="email" id="login-email" class="login-input" placeholder="seu@email.com" autocomplete="email">
+            </div>
+        </div>
+        
+        <div class="login-form-group">
+            <label>Senha de Acesso</label>
+            <div class="login-input-wrapper">
+                <i class="fa-solid fa-lock icon-left"></i>
+                <input type="password" id="login-senha" class="login-input" placeholder="Digite sua senha" onkeypress="verificarEnter(event, 'login')">
+                <i class="fa-regular fa-eye icon-right" onclick="toggleVisibilidadeSenha('login-senha', this)"></i>
+            </div>
+        </div>
+
+        <div class="login-options">
+            <span class="login-link" onclick="alternarTelaLogin('card-recuperar')">Esqueceu sua senha?</span>
+        </div>
+
+        <button type="button" class="btn-login-submit" onclick="realizarLogin()">Entrar</button>
+
+        <div class="login-footer-text">
+            Não possui uma conta? <span class="login-link" onclick="alternarTelaLogin('card-cadastro')">Criar conta</span>
+        </div>
+    </div>
+
+    <!-- 2. TELA DE CADASTRO -->
+    <div id="card-cadastro" class="login-card">
+        <div class="login-header-logo">
+            <div class="logo-premium-icon"><i class="fa-solid fa-chart-line" style="color: var(--neon-cyan); font-size: 20px;"></i></div>
+            <div class="logo-premium-text">Finanças <span>MIL</span></div>
+        </div>
+        <div class="login-subtitle">A inteligência financeira na palma da sua mão</div>
+
+        <div id="msg-erro-cadastro" class="login-erro-msg"></div>
+
+        <div class="login-form-group">
+            <label>Nome Completo</label>
+            <div class="login-input-wrapper">
+                <i class="fa-regular fa-user icon-left"></i>
+                <input type="text" id="cad-nome" class="login-input" placeholder="Como devemos te chamar?">
+            </div>
+        </div>
+
+        <div class="login-form-group">
+            <label>Celular</label>
+            <div class="login-input-wrapper">
+                <i class="fa-solid fa-phone icon-left"></i>
+                <input type="text" id="cad-celular" class="login-input" placeholder="(00) 00000-0000" oninput="mascaraCelularLogin(event)">
+            </div>
+        </div>
+
+        <div class="login-form-group">
+            <label>E-mail</label>
+            <div class="login-input-wrapper">
+                <i class="fa-regular fa-envelope icon-left"></i>
+                <input type="email" id="cad-email" class="login-input" placeholder="Seu melhor e-mail">
+            </div>
+        </div>
+
+        <div class="login-form-group">
+            <label>Senha de Acesso</label>
+            <div class="login-input-wrapper">
+                <i class="fa-solid fa-lock icon-left"></i>
+                <input type="password" id="cad-senha" class="login-input" placeholder="Crie uma senha forte" oninput="validarForcaSenha(event)">
+                <i class="fa-regular fa-eye icon-right" onclick="toggleVisibilidadeSenha('cad-senha', this)"></i>
+            </div>
+            <div class="forca-senha-container" id="forca-container">
+                <div class="forca-senha-bar"><div class="forca-senha-fill" id="forca-senha-fill"></div></div>
+                <div class="forca-senha-texto" id="forca-senha-texto"></div>
+            </div>
+        </div>
+
+        <div class="login-form-group">
+            <label>Confirmar Senha</label>
+            <div class="login-input-wrapper">
+                <i class="fa-solid fa-lock icon-left"></i>
+                <input type="password" id="cad-senha-conf" class="login-input" placeholder="Repita a senha criada" onkeypress="verificarEnter(event, 'cadastro')">
+                <i class="fa-regular fa-eye icon-right" onclick="toggleVisibilidadeSenha('cad-senha-conf', this)"></i>
+            </div>
+        </div>
+
+        <div class="checkbox-group">
+            <input type="checkbox" id="cad-termos">
+            <label for="cad-termos">Li e concordo com os <a>Termos de Uso</a> e a <a>Política de Privacidade</a>.</label>
+        </div>
+        <div class="checkbox-group" style="margin-bottom: 24px;">
+            <input type="checkbox" id="cad-promo" checked>
+            <label for="cad-promo">Aceito receber novidades e insights financeiros.</label>
+        </div>
+
+        <button type="button" class="btn-login-submit" onclick="realizarCadastro()">Concluir Cadastro</button>
+
+        <div class="login-footer-text">
+            Já tem uma conta? <span class="login-link" onclick="alternarTelaLogin('card-login')">Fazer Login</span>
+        </div>
+    </div>
+
+    <!-- 3. TELA DE RECUPERAR SENHA -->
+    <div id="card-recuperar" class="login-card">
+        <div class="login-header-logo">
+            <div class="logo-premium-icon"><i class="fa-solid fa-chart-line" style="color: var(--neon-cyan); font-size: 20px;"></i></div>
+            <div class="logo-premium-text">Finanças <span>MIL</span></div>
+        </div>
+        <div class="login-subtitle">Recupere o acesso à sua conta</div>
+
+        <div id="msg-erro-rec" class="login-erro-msg"></div>
+        <div id="msg-sucesso-rec" class="login-sucesso-msg"></div>
+
+        <div class="login-form-group">
+            <label>E-mail Cadastrado</label>
+            <div class="login-input-wrapper">
+                <i class="fa-regular fa-envelope icon-left"></i>
+                <input type="email" id="rec-email" class="login-input" placeholder="Digite o e-mail da conta" onkeypress="verificarEnter(event, 'recuperar')">
+            </div>
+        </div>
+
+        <button type="button" class="btn-login-submit" onclick="enviarRecuperacao()">Enviar Link de Recuperação</button>
+
+        <div class="login-footer-text">
+            Lembrou a senha? <span class="login-link" onclick="alternarTelaLogin('card-login')">Voltar ao Login</span>
+        </div>
+    </div>
+
+    <script>
+        window.addEventListener('DOMContentLoaded', () => {
+            const emailSalvo = localStorage.getItem('financas_mil_email_login');
+            const senhaSalva = localStorage.getItem('financas_mil_senha_login');
+            
+            if (!emailSalvo || !senhaSalva) {
+                alternarTelaLogin('card-cadastro');
+            } else {
+                document.getElementById('login-email').value = emailSalvo;
+                alternarTelaLogin('card-login');
+            }
+        });
+
+        function alternarTelaLogin(telaDestinoId) {
+            document.querySelectorAll('.login-card').forEach(card => card.classList.remove('active'));
+            document.getElementById(telaDestinoId).classList.add('active');
+            document.querySelectorAll('.login-erro-msg, .login-sucesso-msg').forEach(msg => msg.style.display = 'none');
+        }
+
+        function toggleVisibilidadeSenha(inputId, iconEl) {
+            const input = document.getElementById(inputId);
+            if (input.type === "password") {
+                input.type = "text";
+                iconEl.classList.replace('fa-eye', 'fa-eye-slash');
+            } else {
+                input.type = "password";
+                iconEl.classList.replace('fa-eye-slash', 'fa-eye');
+            }
+        }
+
+        function exibirMsg(id, texto, tipo = 'erro') {
+            const el = document.getElementById(id);
+            el.innerHTML = texto;
+            el.style.display = 'block';
+            el.className = tipo === 'erro' ? 'login-erro-msg' : 'login-sucesso-msg';
+        }
+
+        function mascaraCelularLogin(event) {
+            let valor = event.target.value.replace(/\D/g, '');
+            if (valor.length > 11) valor = valor.slice(0, 11);
+            if (valor.length > 2) valor = `(${valor.substring(0, 2)}) ${valor.substring(2)}`;
+            if (valor.length > 10) valor = `${valor.substring(0, 10)}-${valor.substring(10)}`;
+            event.target.value = valor;
+        }
+
+        function validarForcaSenha(event) {
+            const senha = event.target.value;
+            const container = document.getElementById('forca-container');
+            const fill = document.getElementById('forca-senha-fill');
+            const texto = document.getElementById('forca-senha-texto');
+
+            if (senha.length === 0) { container.style.display = 'none'; return; }
+            container.style.display = 'block';
+
+            let forca = 0;
+            if (senha.length >= 8) forca += 1;
+            if (/[A-Za-z]/.test(senha)) forca += 1;
+            if (/[0-9]/.test(senha)) forca += 1;
+            if (/[^A-Za-z0-9]/.test(senha)) forca += 1;
+
+            if (forca <= 1) {
+                fill.style.width = '33%'; fill.style.background = '#ef4444';
+                texto.style.color = '#ef4444'; texto.innerText = 'Fraca (Use letras, números e min. 8 caracteres)';
+                fill.style.boxShadow = '0 0 10px rgba(239, 68, 68, 0.5)';
+            } else if (forca === 2) {
+                fill.style.width = '66%'; fill.style.background = '#f59e0b';
+                texto.style.color = '#f59e0b'; texto.innerText = 'Razoável (Adicione símbolos para fortalecer)';
+                fill.style.boxShadow = '0 0 10px rgba(245, 158, 11, 0.5)';
+            } else {
+                fill.style.width = '100%'; fill.style.background = '#10b981';
+                texto.style.color = '#10b981'; texto.innerText = 'Forte e Segura';
+                fill.style.boxShadow = '0 0 10px rgba(16, 185, 129, 0.5)';
+            }
+        }
+
+        function realizarCadastro() {
+            const nome = document.getElementById('cad-nome').value;
+            const celular = document.getElementById('cad-celular').value;
+            const email = document.getElementById('cad-email').value;
+            const senha = document.getElementById('cad-senha').value;
+            const senhaConf = document.getElementById('cad-senha-conf').value;
+            const termos = document.getElementById('cad-termos').checked;
+
+            if (!nome || !email || !senha) return exibirMsg('msg-erro-cadastro', 'Por favor, preencha Nome, E-mail e Senha.');
+            if (senha !== senhaConf) return exibirMsg('msg-erro-cadastro', 'As senhas digitadas não coincidem.');
+            if (senha.length < 8 || !/[A-Za-z]/.test(senha) || !/[0-9]/.test(senha)) return exibirMsg('msg-erro-cadastro', 'Sua senha deve ter no mínimo 8 caracteres, com letras e números.');
+            if (!termos) return exibirMsg('msg-erro-cadastro', 'Você precisa aceitar os Termos de Uso e Política de Privacidade.');
+
+            localStorage.setItem('financas_mil_nome', nome);
+            localStorage.setItem('financas_mil_email', email);
+            localStorage.setItem('financas_mil_email_login', email);
+            localStorage.setItem('financas_mil_senha_login', senha);
+            localStorage.setItem('financas_mil_celular', celular);
+
+            document.getElementById('login-email').value = email;
+            document.getElementById('login-senha').value = '';
+            
+            alternarTelaLogin('card-login');
+            exibirMsg('msg-sucesso-login', 'Sua conta foi criada! Acesse com suas credenciais.', 'sucesso');
+        }
+
+        function realizarLogin() {
+            const emailDigitado = document.getElementById('login-email').value;
+            const senhaDigitada = document.getElementById('login-senha').value;
+            const emailSalvo = localStorage.getItem('financas_mil_email_login');
+            const senhaSalva = localStorage.getItem('financas_mil_senha_login');
+
+            if (emailDigitado === emailSalvo && senhaDigitada === senhaSalva) {
+                sessionStorage.setItem('financas_mil_auth', 'true');
+                window.location.href = 'painel.html';
+            } else {
+                exibirMsg('msg-erro-login', 'E-mail ou senha incorretos. Tente novamente.');
+                document.getElementById('login-senha').value = '';
+            }
+        }
+
+        function enviarRecuperacao() {
+            const emailDigitado = document.getElementById('rec-email').value;
+            const emailSalvo = localStorage.getItem('financas_mil_email_login');
+            const senhaSalva = localStorage.getItem('financas_mil_senha_login');
+
+            if (!emailDigitado) return exibirMsg('msg-erro-rec', 'Por favor, digite seu e-mail cadastrado.');
+            if (emailDigitado === emailSalvo) {
+                exibirMsg('msg-sucesso-rec', `Link de recuperação validado localmente. <br><br><span style="font-size:11px; color:#94a3b8;">DICA DE SEGURANÇA LOCAL: Sua senha é <strong>${senhaSalva}</strong></span>`, 'sucesso');
+            } else {
+                exibirMsg('msg-erro-rec', 'Não encontramos este e-mail no banco de dados local.');
+            }
+        }
+
+        function verificarEnter(event, contexto) {
+            if (event.key === 'Enter') {
+                if (contexto === 'login') realizarLogin();
+                if (contexto === 'cadastro') realizarCadastro();
+                if (contexto === 'recuperar') enviarRecuperacao();
+            }
+        }
+    </script>
+</body>
+</html>
