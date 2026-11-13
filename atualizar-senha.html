@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FINANÇAS MIL - Nova Senha</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Supabase JS Client -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Outfit', sans-serif; }
+        body { background: radial-gradient(circle at top right, #0d1b2a, #050811); color: #f8fafc; display: flex; align-items: center; justify-content: center; min-height: 100vh; }
+        .card { background-color: #0b1326; border: 1px solid rgba(0, 240, 255, 0.2); border-radius: 18px; padding: 32px; width: 100%; max-width: 400px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
+        h2 { font-size: 22px; font-weight: 700; margin-bottom: 8px; color: #fff; }
+        p { font-size: 13px; color: #94a3b8; margin-bottom: 24px; }
+        .form-group { display: flex; flex-direction: column; margin-bottom: 18px; }
+        label { font-size: 12px; font-weight: 600; color: #94a3b8; margin-bottom: 6px; text-transform: uppercase; }
+        input { width: 100%; padding: 12px 14px; border: 1px solid rgba(0, 240, 255, 0.2); border-radius: 12px; font-size: 14px; background-color: #131c31; color: #fff; outline: none; }
+        input:focus { border-color: #00f0ff; box-shadow: 0 0 10px rgba(0, 240, 255, 0.2); }
+        .btn-submit { width: 100%; padding: 14px; border: none; border-radius: 12px; font-size: 15px; font-weight: 700; background: linear-gradient(135deg, #00b4d8, #00f0ff); color: #050b14; cursor: pointer; transition: 0.2s; }
+        .btn-submit:hover { filter: brightness(1.1); }
+        .mensagem { margin-top: 15px; font-size: 13px; text-align: center; font-weight: 600; }
+    </style>
+</head>
+<body>
+
+    <div class="card">
+        <h2>Criar Nova Senha</h2>
+        <p>Digite sua nova senha abaixo para acessar sua conta.</p>
+        
+        <form id="form-nova-senha" onsubmit="atualizarSenha(event)">
+            <div class="form-group">
+                <label>Nova Senha</label>
+                <input type="password" id="nova-senha" placeholder="Mínimo de 6 caracteres" required minlength="6">
+            </div>
+            <button type="submit" class="btn-submit">Salvar Nova Senha</button>
+        </form>
+        <div id="mensagem-retorno" class="mensagem"></div>
+    </div>
+
+    <script>
+        // Insira as mesmas credenciais do Supabase usadas no seu painel
+        const SUPABASE_URL = 'https://ztjrjtplgwffsofhtone.supabase.co';
+	const SUPABASE_ANON_KEY = 'sb_publishable_-Y2ysHQmhUbhh2J-T8W-7A_hgLd-YYV';
+        const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+        async function atualizarSenha(e) {
+            e.preventDefault();
+            const novaSenha = document.getElementById('nova-senha').value;
+            const msgEl = document.getElementById('mensagem-retorno');
+
+            msgEl.style.color = '#00f0ff';
+            msgEl.innerText = 'Atualizando senha...';
+
+            // O Supabase lê automaticamente o token da URL (hash) gerado pelo e-mail
+            const { data, error } = await supabaseClient.auth.updateUser({
+                password: novaSenha
+            });
+
+            if (error) {
+                msgEl.style.color = '#ef4444';
+                msgEl.innerText = 'Erro: ' + error.message;
+            } else {
+                msgEl.style.color = '#10b981';
+                msgEl.innerText = 'Senha alterada com sucesso! Redirecionando...';
+                setTimeout(() => {
+                    window.location.href = 'index.html'; // Redireciona para o login
+                }, 2000);
+            }
+        }
+    </script>
+</body>
+</html>
