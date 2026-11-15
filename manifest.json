@@ -3,13 +3,14 @@
   "short_name": "FinançasMil",
   "start_url": "index.html",
   "display": "standalone",
-  "background_color": "#030712",
-  "theme_color": "#030712",
+  "background_color": "#0b1326",
+  "theme_color": "#0b1326",
   "icons": [
     {
-      "src": "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'><rect width='512' height='512' rx='110' fill='%23030712'/><text x='50%' y='55%' dominant-baseline='middle' text-anchor='middle' fill='%2300f0ff' font-size='260' font-family='sans-serif' font-weight='bold'>F</text></svg>",
+      "src": "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Cdefs%3E%3ClinearGradient id='bg' x1='0%25' y1='0%25' x2='100%25' y2='100%25'%3E%3Cstop offset='0%25' stop-color='%230b1326'/%3E%3Cstop offset='100%25' stop-color='%23101c36'/%3E%3C/linearGradient%3E%3ClinearGradient id='neon' x1='0%25' y1='0%25' x2='100%25' y2='100%25'%3E%3Cstop offset='0%25' stop-color='%2300f0ff'/%3E%3Cstop offset='100%25' stop-color='%237c3aed'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='512' height='512' rx='110' fill='url(%23bg)'/%3E%3Cpath d='M140 120h232v60H204v70h148v60H204v102h-64V120z' fill='url(%23neon)'/%3E%3C/svg%3E",
       "sizes": "512x512",
-      "type": "image/svg+xml"
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
     }
   ]
 }
