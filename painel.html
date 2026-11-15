@@ -5,9 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <title>FINANÇAS MIL - Painel Supabase</title>
     
-    <!-- Ícone Oficial da Logo -->
-    <link rel="icon" type="image/png" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg==">
-    <link rel="apple-touch-icon" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg==">
+    <!-- Ícone SVG Neon Embutido na Aba -->
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg viewBox='0 0 340 340' xmlns='http://www.w3.org/2000/svg'%3E%3Cdefs%3E%3ClinearGradient id='neon' x1='0%25' y1='0%25' x2='100%25' y2='100%25'%3E%3Cstop offset='0%25' stop-color='%238cf6ff'/%3E%3Cstop offset='100%25' stop-color='%230080ff'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='340' height='340' rx='76' fill='%23050a18'/%3E%3Ccircle cx='170' cy='150' r='90' fill='none' stroke='url(%23neon)' stroke-width='12'/%3E%3Ctext x='170' y='178' font-size='90' font-weight='800' fill='%2300d2ff' text-anchor='middle' font-family='Montserrat, sans-serif'%3E$</text>%3E%3C/svg%3E">
     
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -15,7 +14,7 @@
     
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;800&family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
@@ -87,21 +86,16 @@
             display: flex; 
         }
 
-        .brand-premium-container { display: flex; align-items: center; gap: 14px; user-select: none; }
-        .logo-premium-icon {
-            position: relative; width: 42px; height: 42px;
-            background: linear-gradient(135deg, #050b14 0%, #101c36 100%);
-            border-radius: 12px; display: flex; align-items: center; justify-content: center;
+        .brand-premium-container { display: flex; align-items: center; gap: 12px; user-select: none; }
+        
+        /* LOGO SVG NOVO FORMATO */
+        .logo-svg-box {
+            width: 42px; height: 42px; border-radius: 12px; overflow: hidden;
             border: 1px solid var(--sidebar-border); box-shadow: var(--shadow-subtle);
-            overflow: hidden;
+            background: #050a18; display: flex; align-items: center; justify-content: center; flex-shrink: 0;
         }
-        /* LOGO OFICIAL EXATA NA TELA DO PAINEL */
-        .logo-img-real {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            border-radius: 10px;
-        }
+        .logo-svg-box svg { width: 100%; height: 100%; }
+
         .logo-premium-text { font-size: 20px; font-weight: 800; color: var(--text-main); letter-spacing: -0.5px; display: flex; align-items: center; gap: 6px; }
         .logo-premium-text .badge-mil { background: linear-gradient(135deg, var(--azul-marca) 0%, var(--roxo-botao-novo) 100%); color: #ffffff; font-size: 11px; font-weight: 800; text-transform: uppercase; padding: 3px 8px; border-radius: 6px; letter-spacing: 0.5px; border: 1px solid rgba(255,255,255,0.2); box-shadow: 0 0 10px rgba(124, 58, 237, 0.4); }
 
@@ -143,7 +137,7 @@
         .btn-sair-sidebar { width: 100%; background-color: var(--red-soft); color: var(--red-main); border: 1px solid rgba(239, 68, 68, 0.3); padding: 12px; border-radius: var(--radius-md); font-weight: 700; font-size: 14px; display: flex; align-items: center; justify-content: center; gap: 10px; cursor: pointer; transition: all 0.2s ease; }
         .btn-sair-sidebar:hover { background-color: var(--red-main); color: #ffffff; }
 
-        /* PRINCIPAL TRAVADO COM SCROLL INTERNO CONTROLADO */
+        /* PRINCIPAL TRAVADO - TELA ESTÁTICA */
         main { 
             margin-left: 260px; flex-grow: 1; padding: 30px 40px; width: calc(100% - 260px); 
             height: 100vh; overflow-y: auto; overscroll-behavior-y: none;
@@ -227,6 +221,8 @@
         .chart-wrapper-box h2::before { content: ''; display: inline-block; width: 4px; height: 16px; background: var(--azul-neon); border-radius: 2px; }
         
         .workspace-layout { display: grid; grid-template-columns: 1fr; gap: 24px; }
+        
+        /* BLOCO DO EXTRATO COM SCROLL INTERNO EXATAMENTE COMO NO BALANÇO ANUAL */
         .content-block { background-color: var(--sidebar-bg); border: 1px solid var(--sidebar-border); border-radius: var(--radius-lg); padding: 24px; box-shadow: var(--shadow-subtle); }
         .content-block h2 { font-size: 16px; font-weight: 700; color: var(--text-main); margin-bottom: 20px; display: flex; align-items: center; gap: 8px; }
         .content-block h2::before { content: ''; display: inline-block; width: 4px; height: 16px; background: var(--roxo-botao-novo); border-radius: 2px; }
@@ -238,9 +234,13 @@
         .btn-export { background-color: var(--gray-soft); border: 1px solid var(--sidebar-border); color: var(--text-main); padding: 8px 14px; border-radius: var(--radius-md); font-size: 12px; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 6px; transition: all 0.2s; }
         .btn-export:hover { border-color: var(--azul-neon); color: var(--azul-neon); background-color: rgba(0,240,255,0.05); }
 
-        .table-container { width: 100%; overflow-x: auto; }
+        /* TABELA COM ROLAGEM INTERNA EXCLUSIVA DO CARD */
+        .table-container { width: 100%; max-height: 380px; overflow-y: auto; overscroll-behavior: contain; }
+        .table-container::-webkit-scrollbar { width: 6px; }
+        .table-container::-webkit-scrollbar-thumb { background: var(--sidebar-border); border-radius: 4px; }
+        
         table { width: 100%; border-collapse: collapse; text-align: left; font-size: 14px; }
-        th { background-color: var(--gray-soft); color: var(--text-secondary); font-weight: 600; padding: 14px 18px; border-bottom: 1px solid var(--sidebar-border); }
+        th { background-color: var(--gray-soft); color: var(--text-secondary); font-weight: 600; padding: 14px 18px; border-bottom: 1px solid var(--sidebar-border); position: sticky; top: 0; z-index: 10; }
         td { padding: 14px 18px; border-bottom: 1px solid var(--sidebar-border); color: var(--text-main); }
         .badge-table { padding: 5px 10px; border-radius: 12px; font-size: 11px; font-weight: 700; letter-spacing: 0.3px; }
         .badge-table.in { background-color: var(--verde-soft); color: var(--verde-destaque); border: 1px solid rgba(16, 185, 129, 0.3); }
@@ -475,8 +475,18 @@
     <aside>
         <div class="brand-wrapper">
             <div class="brand-premium-container">
-                <div class="logo-premium-icon">
-                    <img src="https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=200&auto=format&fit=crop&q=80" alt="Finanças Mil" class="logo-img-real" id="logo-img-sidebar">
+                <div class="logo-svg-box">
+                    <svg viewBox="0 0 340 340" xmlns="http://www.w3.org/2000/svg">
+                        <defs>
+                            <linearGradient id="neon-stroke" x1="0%" y1="0%" x2="100%" y2="100%">
+                                <stop offset="0%" stop-color="#8cf6ff" />
+                                <stop offset="100%" stop-color="#0080ff" />
+                            </linearGradient>
+                        </defs>
+                        <rect width="340" height="340" rx="76" fill="#050a18"/>
+                        <circle cx="170" cy="150" r="90" fill="none" stroke="url(#neon-stroke)" stroke-width="12"/>
+                        <text x="170" y="178" font-size="90" font-weight="800" fill="#00d2ff" text-anchor="middle" font-family="Montserrat, sans-serif">$</text>
+                    </svg>
                 </div>
                 <div class="logo-premium-text">
                     <span class="part-financas">Finanças</span>
@@ -550,8 +560,18 @@
             <div class="app-title-box">
                 <button class="btn-abrir-menu" onclick="toggleSidebar()"><i class="fa-solid fa-bars"></i></button>
                 <div class="brand-premium-container">
-                    <div class="logo-premium-icon" style="width: 44px; height: 44px; border-radius: 14px;">
-                        <img src="https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=200&auto=format&fit=crop&q=80" alt="Finanças Mil" class="logo-img-real" id="logo-img-top">
+                    <div class="logo-svg-box" style="width: 44px; height: 44px; border-radius: 14px;">
+                        <svg viewBox="0 0 340 340" xmlns="http://www.w3.org/2000/svg">
+                            <defs>
+                                <linearGradient id="neon-stroke2" x1="0%" y1="0%" x2="100%" y2="100%">
+                                    <stop offset="0%" stop-color="#8cf6ff" />
+                                    <stop offset="100%" stop-color="#0080ff" />
+                                </linearGradient>
+                            </defs>
+                            <rect width="340" height="340" rx="76" fill="#050a18"/>
+                            <circle cx="170" cy="150" r="90" fill="none" stroke="url(#neon-stroke2)" stroke-width="12"/>
+                            <text x="170" y="178" font-size="90" font-weight="800" fill="#00d2ff" text-anchor="middle" font-family="Montserrat, sans-serif">$</text>
+                        </svg>
                     </div>
                     <div>
                         <div class="logo-premium-text" style="font-size: 22px;">
@@ -639,6 +659,7 @@
             </div>
 
             <div class="workspace-layout">
+                <!-- EXTRATO COM ROLAGEM INTERNA EXCLUSIVA DO CARD -->
                 <div class="content-block" id="section-extrato-block">
                     <div class="toolbar-table">
                         <h2>Extrato de Lançamentos</h2>
