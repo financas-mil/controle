@@ -276,7 +276,29 @@
         .btn-mini-acao { background-color: var(--gray-soft); border: 1px solid var(--sidebar-border); color: var(--text-main); font-size: 11px; font-weight: 600; padding: 6px 10px; border-radius: 6px; cursor: pointer; display: flex; align-items: center; gap: 4px; transition: 0.2s; }
         .btn-mini-acao:hover { border-color: var(--azul-neon); color: var(--azul-neon); }
 
-        /* ESTILOS ESPECÍFICOS DO NOVO MÓDULO DE DÍVIDAS (DO VÍDEO) */
+        /* ESTILOS DOS BOTÕES PADRONIZADOS DO MÓDULO DE DÍVIDAS (FINANÇAS MIL) */
+        .btn-cadastrar-primeira-divida {
+            background: linear-gradient(135deg, var(--azul-marca) 0%, var(--roxo-botao-novo) 100%);
+            color: #ffffff;
+            border: 1px solid var(--azul-neon);
+            padding: 12px 24px;
+            border-radius: var(--radius-md);
+            font-weight: 700;
+            font-size: 14px;
+            cursor: pointer;
+            box-shadow: 0 0 15px rgba(0, 180, 216, 0.3);
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+        .btn-cadastrar-primeira-divida:hover {
+            background: linear-gradient(135deg, var(--azul-neon) 0%, var(--roxo-botao-novo) 100%);
+            box-shadow: var(--azul-neon-glow);
+            transform: translateY(-2px);
+        }
+
         .dividas-header-banner { background: linear-gradient(135deg, rgba(16, 185, 129, 0.1), rgba(0, 180, 216, 0.05)); border: 1px solid rgba(16, 185, 129, 0.3); border-radius: var(--radius-lg); padding: 20px 24px; margin-bottom: 24px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 15px; }
         .divida-card-moderno { background-color: var(--sidebar-bg); border: 1px solid var(--sidebar-border); border-radius: var(--radius-lg); padding: 20px; box-shadow: var(--shadow-subtle); display: flex; flex-direction: column; gap: 12px; cursor: pointer; transition: transform 0.2s, border-color 0.2s; position: relative; }
         .divida-card-moderno:hover { transform: translateY(-3px); border-color: rgba(16, 185, 129, 0.4); }
@@ -362,8 +384,10 @@
         .modal-input { width: 100%; padding: 12px 14px 12px 42px; border: 1px solid var(--sidebar-border); border-radius: 12px; font-size: 14px; outline: none; color: var(--text-main); background-color: var(--gray-soft); transition: border-color 0.2s; }
         .modal-input:focus { border-color: var(--azul-neon); box-shadow: 0 0 10px rgba(0, 240, 255, 0.15); }
         .modal-input option { background-color: var(--sidebar-bg); color: var(--text-main); }
-        .btn-modal-submit { width: 100%; padding: 14px; border: none; border-radius: 12px; font-size: 15px; font-weight: 700; color: #050b14; cursor: pointer; background: linear-gradient(135deg, var(--verde-destaque) 0%, #059669 100%); box-shadow: 0 0 15px rgba(16, 185, 129, 0.3); transition: 0.2s; }
-        .btn-modal-submit:hover { filter: brightness(1.15); transform: translateY(-1px); color: #fff; }
+        
+        /* BOTÃO DE SUBMIT PADRONIZADO PARA O MODAL DE DÍVIDA */
+        .btn-modal-submit { width: 100%; padding: 14px; border: none; border-radius: 12px; font-size: 15px; font-weight: 700; color: #ffffff; cursor: pointer; background: linear-gradient(135deg, var(--azul-marca) 0%, var(--roxo-botao-novo) 100%); box-shadow: 0 0 15px rgba(0, 180, 216, 0.3); transition: 0.2s; }
+        .btn-modal-submit:hover { background: linear-gradient(135deg, var(--azul-neon) 0%, var(--roxo-botao-novo) 100%); box-shadow: var(--azul-neon-glow); transform: translateY(-1px); }
 
         .calc-display { width: 100%; background: #050b14; border: 1px solid var(--sidebar-border); border-radius: 12px; padding: 16px; font-size: 26px; text-align: right; color: var(--azul-neon); font-weight: 700; outline: none; margin-bottom: 16px; letter-spacing: 1px; box-shadow: inset 0 2px 5px rgba(0,0,0,0.5); }
         .calc-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; }
@@ -747,7 +771,7 @@
             </div>
         </div>
 
-        <!-- SEÇÃO DÍVIDAS ATUALIZADA EXATAMENTE COMO NO VÍDEO -->
+        <!-- SEÇÃO DÍVIDAS ATUALIZADA COM OS BOTÕES PADRONIZADOS -->
         <div id="section-dividas" class="page-section">
             <div class="kpi-grid">
                 <div class="kpi-card">
@@ -788,6 +812,7 @@
 
             <div class="toolbar-table">
                 <h2 style="font-size: 20px; font-weight: 800; color: #fff;">Minhas Dívidas</h2>
+                <!-- BOTÃO PADRONIZADO COM CLASSE CSS btn-cadastrar-primeira-divida -->
                 <button type="button" class="btn-cadastrar-primeira-divida" onclick="abrirModalNovaDividaPasso1()">+ Nova Dívida</button>
             </div>
 
@@ -897,7 +922,7 @@
         </div>
     </div>
 
-    <!-- MODAIS DE DÍVIDAS (DO VÍDEO) -->
+    <!-- MODAIS DE DÍVIDAS -->
     <div class="modal-overlay" id="modal-nova-divida-passo1">
         <div class="modal-container" style="max-width: 520px;">
             <div class="modal-header">
@@ -987,6 +1012,7 @@
                 </div>
                 <div style="display: flex; gap: 10px; margin-top: 10px;">
                     <button type="button" class="btn-modal-submit" style="background: var(--gray-soft); color: var(--text-main); border: 1px solid var(--sidebar-border);" onclick="voltarPasso1Divida()">Voltar</button>
+                    <!-- BOTÃO PADRONIZADO COM CLASSE CSS btn-modal-submit -->
                     <button type="submit" class="btn-modal-submit">Cadastrar Dívida</button>
                 </div>
             </form>
@@ -1941,7 +1967,7 @@
             renderizarInvestimentos();
         }
 
-        /* --- LÓGICA COMPLETA DO MÓDULO DE DÍVIDAS (DO VÍDEO) --- */
+        /* --- LÓGICA COMPLETA DO MÓDULO DE DÍVIDAS --- */
         function abrirModalNovaDividaPasso1() {
             document.getElementById('modal-nova-divida-passo1').classList.add('active');
         }
@@ -2058,7 +2084,6 @@
                     totalSaldoDevedor += saldoDev;
                     totalJuros += (d.taxas || 0) * pagas;
 
-                    // Calcular próxima data de vencimento
                     let dtBase = new Date(d.data_inicio + 'T00:00:00');
                     dtBase.setMonth(dtBase.getMonth() + pagas);
                     let hoje = new Date();
@@ -2121,7 +2146,6 @@
             document.getElementById('divida-proximo-vencimento-txt').innerHTML = `Próxima parcela: <strong>${proximoVencimentoTexto}</strong>`;
             document.getElementById('divida-livre-txt').innerText = `Livre de dívidas em: ${menorDataVenc ? nomesMesesCapital[menorDataVenc.getMonth()] + '/' + menorDataVenc.getFullYear() : '--'}`;
 
-            // Alerta próximos 7 dias
             if (dividas.length > 0 && menorDataVenc) {
                 let diffD = Math.ceil((menorDataVenc - new Date()) / (1000 * 60 * 60 * 24));
                 if (diffD >= 0 && diffD <= 7) {
@@ -2164,7 +2188,6 @@
             document.getElementById('detalhe-info-parcelas').innerText = `${pagas}/${numP}`;
             document.getElementById('detalhe-info-tipo').innerText = d.tipo || 'Financiamento';
 
-            // Renderizar tabela de parcelas
             let dtBase = new Date(d.data_inicio + 'T00:00:00');
             const tbody = document.getElementById('tabela-parcelas-detalhe');
             tbody.innerHTML = '';
