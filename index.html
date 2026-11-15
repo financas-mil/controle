@@ -320,19 +320,47 @@
         </div>
     </div>
 
+    <!-- 4. MODAL PARA REDEFINIÇÃO DE SENHA (ABRE AUTOMÁTICO PELO LINK DO E-MAIL) -->
+    <div class="modal-overlay" id="modal-redefinir-senha" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(3, 7, 18, 0.9); backdrop-filter: blur(15px); z-index: 2000; align-items: center; justify-content: center; padding: 15px;">
+        <div class="login-card active" style="max-width: 420px; display: block; margin: 0 auto;">
+            <div class="login-header-logo">
+                <div class="logo-premium-icon"><i class="fa-solid fa-lock" style="color: var(--neon-cyan); font-size: 20px;"></i></div>
+                <div class="logo-premium-text">Nova <span>Senha</span></div>
+            </div>
+            <div class="login-subtitle">Digite a sua nova senha de acesso abaixo</div>
+
+            <form onsubmit="salvarNovaSenhaSupabase(event)">
+                <div class="login-form-group">
+                    <label>Nova Senha</label>
+                    <div class="login-input-wrapper">
+                        <i class="fa-solid fa-lock icon-left"></i>
+                        <input type="password" id="input-nova-senha" class="login-input" placeholder="Mínimo de 6 caracteres" required minlength="6">
+                        <i class="fa-regular fa-eye icon-right" onclick="toggleVisibilidadeSenha('input-nova-senha', this)"></i>
+                    </div>
+                </div>
+                <button type="submit" class="btn-login-submit" style="margin-top: 10px;">Salvar Nova Senha</button>
+            </form>
+        </div>
+    </div>
+
     <!-- SCRIPT DE CONEXÃO COM O SUPABASE E LÓGICA DE LOGIN -->
     <script>
-        // ⚠️ COLE ABAIXO AS SUAS CREDENCIAIS REAIS DO SUPABASE (URL e Anon Key)
         const SUPABASE_URL = 'https://ztjrjtplgwffsofhtone.supabase.co';
-	const SUPABASE_ANON_KEY = 'sb_publishable_-Y2ysHQmhUbhh2J-T8W-7A_hgLd-YYV';
+        const SUPABASE_ANON_KEY = 'sb_publishable_-Y2ysHQmhUbhh2J-T8W-7A_hgLd-YYV';
         
         const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
         window.addEventListener('DOMContentLoaded', async () => {
-            // Verifica se já existe uma sessão ativa no Supabase
+            // Escuta se o usuário abriu a página através do link de recuperação de senha do e-mail
+            supabaseClient.auth.onAuthStateChange(async (event, session) => {
+                if (event === "PASSWORD_RECOVERY") {
+                    document.getElementById('modal-redefinir-senha').style.display = 'flex';
+                }
+            });
+
+            // Verifica se já existe uma sessão ativa no Supabase (se já estiver logado e não for recovery)
             const { data: { session } } = await supabaseClient.auth.getSession();
-            if (session) {
-                // Se já estiver logado, redireciona direto para o painel
+            if (session && !window.location.hash.includes('type=recovery')) {
                 window.location.href = 'painel.html';
                 return;
             }
@@ -414,7 +442,6 @@
             if (senha.length < 8 || !/[A-Za-z]/.test(senha) || !/[0-9]/.test(senha)) return exibirMsg('msg-erro-cadastro', 'Sua senha deve ter no mínimo 8 caracteres, com letras e números.');
             if (!termos) return exibirMsg('msg-erro-cadastro', 'Você precisa aceitar os Termos de Uso e Política de Privacidade.');
 
-            // Chamada de cadastro oficial no Supabase Auth
             const { data, error } = await supabaseClient.auth.signUp({
                 email: email,
                 password: senha,
@@ -447,7 +474,6 @@
                 return;
             }
 
-            // Autenticação oficial no Supabase Auth
             const { data, error } = await supabaseClient.auth.signInWithPassword({
                 email: emailDigitado,
                 password: senhaDigitada
@@ -459,7 +485,6 @@
                 return;
             }
 
-            // Sucesso no login, redireciona para o painel
             window.location.href = 'painel.html';
         }
 
@@ -468,8 +493,9 @@
 
             if (!emailDigitado) return exibirMsg('msg-erro-rec', 'Por favor, digite seu e-mail cadastrado.');
 
+            // Redireciona de volta para o index.html principal ao clicar no link do e-mail
             const { data, error } = await supabaseClient.auth.resetPasswordForEmail(emailDigitado, {
-                redirectTo: window.location.origin + '/painel.html',
+                redirectTo: window.location.origin + window.location.pathname,
             });
 
             if (error) {
@@ -478,6 +504,28 @@
             }
 
             exibirMsg('msg-sucesso-rec', 'Instruções de recuperação enviadas para o seu e-mail.', 'sucesso');
+        }
+
+        async function salvarNovaSenhaSupabase(e) {
+            e.preventDefault();
+            const novaSenha = document.getElementById('input-nova-senha').value;
+
+            if (!novaSenha || novaSenha.length < 6) {
+                alert("A senha deve ter pelo menos 6 caracteres.");
+                return;
+            }
+
+            const { data, error } = await supabaseClient.auth.updateUser({
+                password: novaSenha
+            });
+
+            if (!error) {
+                alert("Senha alterada com sucesso! Faça login com a sua nova senha.");
+                document.getElementById('modal-redefinir-senha').style.display = 'none';
+                window.location.href = window.location.pathname; 
+            } else {
+                alert("Erro ao atualizar a senha: " + error.message);
+            }
         }
 
         function verificarEnter(event, contexto) {
