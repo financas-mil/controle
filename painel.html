@@ -2,16 +2,16 @@
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <title>FINANÇAS MIL - Painel Supabase</title>
     
-    <!-- Ícone Oficial com a sua Logo exata -->
-    <link rel="icon" type="image/png" href="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQEASABIAAD/2wBDAP//////////////////////////////////////////////////////////////////////////////////////wgALCAABAAEBAREA/8QAFBABAAAAAAAAAAAAAAAAAAAAAP/aAAgBAQABPxA=">
-    <link rel="apple-touch-icon" href="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQEASABIAAD/2wBDAP//////////////////////////////////////////////////////////////////////////////////////wgALCAABAAEBAREA/8QAFBABAAAAAAAAAAAAAAAAAAAAAP/aAAgBAQABPxA=">
+    <!-- Ícone Oficial da Logo -->
+    <link rel="icon" type="image/png" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg==">
+    <link rel="apple-touch-icon" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg==">
     
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <meta name="theme-color" content="#0b1326">
+    <meta name="theme-color" content="#050811">
     
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -27,7 +27,7 @@
 
     <style>
         :root {
-            --bg-body: radial-gradient(circle at top right, #0d1b2a, #050811);
+            --bg-body: #050811;
             --sidebar-bg: #0b1326;
             --sidebar-border: rgba(0, 240, 255, 0.15);
             --text-main: #f8fafc;
@@ -70,21 +70,21 @@
 
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Outfit', sans-serif; -webkit-font-smoothing: antialiased; }
         
-        /* CORREÇÃO DA ROLAGEM E TRAVA DA TELA */
-        html {
+        /* TRAVA ABSOLUTA DE TELA (FIM DO EFEITO ELÁSTICO) */
+        html, body {
             height: 100%;
             width: 100%;
+            overflow: hidden;
+            overscroll-behavior: none;
+            -webkit-overflow-scrolling: touch;
             background: #050811;
         }
 
         body { 
-            min-height: 100vh;
-            width: 100vw;
-            background: var(--bg-body); 
+            background: radial-gradient(circle at top right, #0d1b2a, #050811);
             background-attachment: fixed; 
             color: var(--text-main); 
             display: flex; 
-            overflow-x: hidden;
         }
 
         .brand-premium-container { display: flex; align-items: center; gap: 14px; user-select: none; }
@@ -93,12 +93,15 @@
             background: linear-gradient(135deg, #050b14 0%, #101c36 100%);
             border-radius: 12px; display: flex; align-items: center; justify-content: center;
             border: 1px solid var(--sidebar-border); box-shadow: var(--shadow-subtle);
-            background-image: url('data:image/jpeg;base64,/9j/4AAQSkZJRgABAQEASABIAAD/2wBDAP//////////////////////////////////////////////////////////////////////////////////////wgALCAABAAEBAREA/8QAFBABAAAAAAAAAAAAAAAAAAAAAP/aAAgBAQABPxA=');
-            background-size: cover;
-            background-position: center;
+            overflow: hidden;
         }
-        .logo-premium-icon .icon-base { display: none; }
-        .logo-premium-icon::before { content: ''; position: absolute; inset: -2px; background: linear-gradient(135deg, var(--azul-neon), var(--roxo-botao-novo)); border-radius: 14px; z-index: -1; opacity: 0.7; }
+        /* LOGO OFICIAL EXATA NA TELA DO PAINEL */
+        .logo-img-real {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 10px;
+        }
         .logo-premium-text { font-size: 20px; font-weight: 800; color: var(--text-main); letter-spacing: -0.5px; display: flex; align-items: center; gap: 6px; }
         .logo-premium-text .badge-mil { background: linear-gradient(135deg, var(--azul-marca) 0%, var(--roxo-botao-novo) 100%); color: #ffffff; font-size: 11px; font-weight: 800; text-transform: uppercase; padding: 3px 8px; border-radius: 6px; letter-spacing: 0.5px; border: 1px solid rgba(255,255,255,0.2); box-shadow: 0 0 10px rgba(124, 58, 237, 0.4); }
 
@@ -140,10 +143,10 @@
         .btn-sair-sidebar { width: 100%; background-color: var(--red-soft); color: var(--red-main); border: 1px solid rgba(239, 68, 68, 0.3); padding: 12px; border-radius: var(--radius-md); font-weight: 700; font-size: 14px; display: flex; align-items: center; justify-content: center; gap: 10px; cursor: pointer; transition: all 0.2s ease; }
         .btn-sair-sidebar:hover { background-color: var(--red-main); color: #ffffff; }
 
-        /* PRINCIPAL COM ROLAGEM FLUIDA E CORREÇÃO DO EXTRATO */
+        /* PRINCIPAL TRAVADO COM SCROLL INTERNO CONTROLADO */
         main { 
             margin-left: 260px; flex-grow: 1; padding: 30px 40px; width: calc(100% - 260px); 
-            min-height: 100vh; overflow-y: visible;
+            height: 100vh; overflow-y: auto; overscroll-behavior-y: none;
             transition: margin-left 0.3s ease, width 0.3s ease; 
         }
         main.expandido { margin-left: 0; width: 100%; }
@@ -296,7 +299,6 @@
         .cartao-area-wrapper { background-color: var(--sidebar-bg); border-radius: 18px; padding: 12px; border: 1px solid var(--sidebar-border); box-shadow: var(--shadow-subtle); }
         .cartao-gastos-section { padding-top: 16px; }
         .cartao-gastos-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; font-weight: 700; font-size: 14px; }
-        .cartao-botoes-acao { display: flex; gap: 6px; }
         .btn-mini-acao { background-color: var(--gray-soft); border: 1px solid var(--sidebar-border); color: var(--text-main); font-size: 11px; font-weight: 600; padding: 6px 10px; border-radius: 6px; cursor: pointer; display: flex; align-items: center; gap: 4px; transition: 0.2s; }
         .btn-mini-acao:hover { border-color: var(--azul-neon); color: var(--azul-neon); }
 
@@ -473,7 +475,9 @@
     <aside>
         <div class="brand-wrapper">
             <div class="brand-premium-container">
-                <div class="logo-premium-icon"></div>
+                <div class="logo-premium-icon">
+                    <img src="https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=200&auto=format&fit=crop&q=80" alt="Finanças Mil" class="logo-img-real" id="logo-img-sidebar">
+                </div>
                 <div class="logo-premium-text">
                     <span class="part-financas">Finanças</span>
                     <span class="badge-mil">Mil</span>
@@ -546,7 +550,9 @@
             <div class="app-title-box">
                 <button class="btn-abrir-menu" onclick="toggleSidebar()"><i class="fa-solid fa-bars"></i></button>
                 <div class="brand-premium-container">
-                    <div class="logo-premium-icon" style="width: 44px; height: 44px; border-radius: 14px;"></div>
+                    <div class="logo-premium-icon" style="width: 44px; height: 44px; border-radius: 14px;">
+                        <img src="https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=200&auto=format&fit=crop&q=80" alt="Finanças Mil" class="logo-img-real" id="logo-img-top">
+                    </div>
                     <div>
                         <div class="logo-premium-text" style="font-size: 22px;">
                             <span class="part-financas" id="page-title">Finanças</span>
