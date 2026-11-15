@@ -351,16 +351,23 @@
         const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
         window.addEventListener('DOMContentLoaded', async () => {
-            // Escuta se o usuário abriu a página através do link de recuperação de senha do e-mail
+            // 1. Verifica se a URL contém o token de recuperação de senha do Supabase
+            const hash = window.location.hash;
+            if (hash && (hash.includes('type=recovery') || hash.includes('access_token'))) {
+                document.getElementById('modal-redefinir-senha').style.display = 'flex';
+                return; // Interrompe para não redirecionar para o painel
+            }
+
+            // 2. Escuta mudanças de estado do Supabase (caso venha o evento de recovery)
             supabaseClient.auth.onAuthStateChange(async (event, session) => {
                 if (event === "PASSWORD_RECOVERY") {
                     document.getElementById('modal-redefinir-senha').style.display = 'flex';
                 }
             });
 
-            // Verifica se já existe uma sessão ativa no Supabase (se já estiver logado e não for recovery)
+            // 3. Verifica se já existe sessão ativa
             const { data: { session } } = await supabaseClient.auth.getSession();
-            if (session && !window.location.hash.includes('type=recovery')) {
+            if (session) {
                 window.location.href = 'painel.html';
                 return;
             }
@@ -493,7 +500,6 @@
 
             if (!emailDigitado) return exibirMsg('msg-erro-rec', 'Por favor, digite seu e-mail cadastrado.');
 
-            // Redireciona de volta para o index.html principal ao clicar no link do e-mail
             const { data, error } = await supabaseClient.auth.resetPasswordForEmail(emailDigitado, {
                 redirectTo: window.location.origin + window.location.pathname,
             });
