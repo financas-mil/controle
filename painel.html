@@ -1,11 +1,12 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-    <!-- Ícone Oficial do FINANÇAS MIL incorporado com base na sua logo neon -->
-    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'><defs><linearGradient id='bg' x1='0%' y1='0%' x2='100%' y2='100%'><stop offset='0%' stop-color='%230b1326'/><stop offset='100%' stop-color='%23101c36'/></linearGradient></defs><rect width='512' height='512' rx='110' fill='url(%23bg)'/><text x='50%' y='55%' dominant-baseline='middle' text-anchor='middle' fill='%2300f0ff' font-size='280' font-family='Outfit, sans-serif' font-weight='bold'>F</text></svg>">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>FINANÇAS MIL - Painel Supabase</title>
+    
+    <!-- Ícone Oficial -->
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Cdefs%3E%3ClinearGradient id='bg' x1='0%25' y1='0%25' x2='100%25' y2='100%25'%3E%3Cstop offset='0%25' stop-color='%230b1326'/%3E%3Cstop offset='100%25' stop-color='%23101c36'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='512' height='512' rx='110' fill='url(%23bg)'/%3E%3Cpath d='M140 130h232v56H204v72h148v56H204v104h-64V130z' fill='%2300f0ff'/%3E%3C/svg%3E">
     
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -17,7 +18,6 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
-    <!-- Supabase JS Client -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     
     <script>
@@ -69,14 +69,14 @@
 
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Outfit', sans-serif; -webkit-font-smoothing: antialiased; }
         
-        /* TRAVAS DE TELA NATIVA PARA EVITAR O COMPORTAMENTO ELÁSTICO/FLUTUANTE NO CELULAR */
+        /* TRAVA NATIVA ESTÁVEL PARA CELULAR (ELIMINA O EFEITO ELÁSTICO) */
         html, body {
             height: 100%;
-            overflow: hidden;
-            position: fixed;
             width: 100%;
-            overscroll-behavior: none;
+            overflow: hidden;
+            overscroll-behavior-y: none;
             -webkit-overflow-scrolling: touch;
+            background: #050811;
         }
 
         body { 
@@ -84,7 +84,6 @@
             background-attachment: fixed; 
             color: var(--text-main); 
             display: flex; 
-            transition: background-color 0.3s, color 0.3s; 
         }
 
         .brand-premium-container { display: flex; align-items: center; gap: 14px; user-select: none; }
@@ -101,7 +100,7 @@
 
         aside { 
             width: 260px; background-color: var(--sidebar-bg); border-right: 1px solid var(--sidebar-border); 
-            display: flex; flex-direction: column; padding: 20px 14px; position: fixed; height: 100vh; left: 0; top: 0; z-index: 100; 
+            display: flex; flex-direction: column; padding: 20px 14px; height: 100vh; position: fixed; left: 0; top: 0; z-index: 100; 
             box-shadow: 5px 0 30px rgba(0, 0, 0, 0.3); transition: transform 0.3s ease;
         }
         aside.oculto { transform: translateX(-100%); }
@@ -137,10 +136,10 @@
         .btn-sair-sidebar { width: 100%; background-color: var(--red-soft); color: var(--red-main); border: 1px solid rgba(239, 68, 68, 0.3); padding: 12px; border-radius: var(--radius-md); font-weight: 700; font-size: 14px; display: flex; align-items: center; justify-content: center; gap: 10px; cursor: pointer; transition: all 0.2s ease; }
         .btn-sair-sidebar:hover { background-color: var(--red-main); color: #ffffff; }
 
-        /* PRINCIPAL COM SCROLL INTERNO TRAVADO */
+        /* PRINCIPAL COM SCROLL INTERNO CONTROLADO */
         main { 
             margin-left: 260px; flex-grow: 1; padding: 30px 40px; width: calc(100% - 260px); 
-            height: 100vh; overflow-y: auto; overscroll-behavior: contain;
+            height: 100vh; overflow-y: auto; overscroll-behavior-y: contain;
             transition: margin-left 0.3s ease, width 0.3s ease; 
         }
         main.expandido { margin-left: 0; width: 100%; }
@@ -299,7 +298,6 @@
         .btn-mini-acao { background-color: var(--gray-soft); border: 1px solid var(--sidebar-border); color: var(--text-main); font-size: 11px; font-weight: 600; padding: 6px 10px; border-radius: 6px; cursor: pointer; display: flex; align-items: center; gap: 4px; transition: 0.2s; }
         .btn-mini-acao:hover { border-color: var(--azul-neon); color: var(--azul-neon); }
 
-        /* ESTILOS DOS BOTÕES PADRONIZADOS DO MÓDULO DE DÍVIDAS (FINANÇAS MIL) */
         .btn-cadastrar-primeira-divida {
             background: linear-gradient(135deg, var(--azul-marca) 0%, var(--roxo-botao-novo) 100%);
             color: #ffffff;
@@ -408,7 +406,6 @@
         .modal-input:focus { border-color: var(--azul-neon); box-shadow: 0 0 10px rgba(0, 240, 255, 0.15); }
         .modal-input option { background-color: var(--sidebar-bg); color: var(--text-main); }
         
-        /* BOTÃO DE SUBMIT PADRONIZADO PARA O MODAL DE DÍVIDA */
         .btn-modal-submit { width: 100%; padding: 14px; border: none; border-radius: 12px; font-size: 15px; font-weight: 700; color: #ffffff; cursor: pointer; background: linear-gradient(135deg, var(--azul-marca) 0%, var(--roxo-botao-novo) 100%); box-shadow: 0 0 15px rgba(0, 180, 216, 0.3); transition: 0.2s; }
         .btn-modal-submit:hover { background: linear-gradient(135deg, var(--azul-neon) 0%, var(--roxo-botao-novo) 100%); box-shadow: var(--azul-neon-glow); transform: translateY(-1px); }
 
@@ -540,9 +537,6 @@
             </div>
             <div class="menu-item" onclick="abrirModalNotas()">
                 <div class="menu-item-inner"><i class="fa-solid fa-note-sticky"></i> Bloco de Notas</div>
-            </div>
-            <div class="menu-item" onclick="abrirModalIndependencia()">
-                <div class="menu-item-inner"><i class="fa-solid fa-chart-line"></i> Calculadora FI</div>
             </div>
         </div>
 
@@ -794,7 +788,6 @@
             </div>
         </div>
 
-        <!-- SEÇÃO DÍVIDAS ATUALIZADA COM OS BOTÕES PADRONIZADOS -->
         <div id="section-dividas" class="page-section">
             <div class="kpi-grid">
                 <div class="kpi-card">
@@ -835,7 +828,6 @@
 
             <div class="toolbar-table">
                 <h2 style="font-size: 20px; font-weight: 800; color: #fff;">Minhas Dívidas</h2>
-                <!-- BOTÃO PADRONIZADO COM CLASSE CSS btn-cadastrar-primeira-divida -->
                 <button type="button" class="btn-cadastrar-primeira-divida" onclick="abrirModalNovaDividaPasso1()">+ Nova Dívida</button>
             </div>
 
@@ -1035,160 +1027,9 @@
                 </div>
                 <div style="display: flex; gap: 10px; margin-top: 10px;">
                     <button type="button" class="btn-modal-submit" style="background: var(--gray-soft); color: var(--text-main); border: 1px solid var(--sidebar-border);" onclick="voltarPasso1Divida()">Voltar</button>
-                    <!-- BOTÃO PADRONIZADO COM CLASSE CSS btn-modal-submit -->
                     <button type="submit" class="btn-modal-submit">Cadastrar Dívida</button>
                 </div>
             </form>
-        </div>
-    </div>
-
-    <!-- MODAL DETALHES / SIMULADOR / ALTERAR VENCIMENTO DA DÍVIDA -->
-    <div class="modal-overlay" id="modal-detalhes-divida">
-        <div class="modal-container" style="max-width: 640px;">
-            <div class="modal-header">
-                <div>
-                    <h3 id="detalhe-divida-titulo"><i class="fa-solid fa-house-chimney" style="color:var(--verde-destaque);"></i> Financiamento carro</h3>
-                    <p id="detalhe-divida-credor" style="font-size:12px; color:var(--text-secondary); margin-top:2px;">banco santander</p>
-                </div>
-                <button type="button" class="btn-close-modal" onclick="fecharModal('modal-detalhes-divida')"><i class="fa-solid fa-xmark"></i></button>
-            </div>
-
-            <div style="display: flex; gap: 10px; margin-bottom: 20px; border-bottom: 1px solid var(--sidebar-border); padding-bottom: 12px;">
-                <button type="button" class="tab-btn active receita" id="btn-tab-resumo-divida" onclick="trocarAbaModalDivida('resumo')"><i class="fa-solid fa-chart-pie"></i> Resumo</button>
-                <button type="button" class="tab-btn despesa" id="btn-tab-parcelas-divida" onclick="trocarAbaModalDivida('parcelas')"><i class="fa-solid fa-list-check"></i> Parcelas</button>
-            </div>
-
-            <!-- CONTEÚDO RESUMO -->
-            <div id="divida-conteudo-resumo">
-                <div style="margin-bottom: 16px;">
-                    <div style="display:flex; justify-content:space-between; font-size:12px; color:var(--text-secondary); margin-bottom:4px;">
-                        <span>Progresso</span>
-                        <strong id="detalhe-progresso-pct" style="color:var(--verde-destaque);">0%</strong>
-                    </div>
-                    <div style="width:100%; height:8px; background:var(--gray-soft); border-radius:4px; overflow:hidden; border:1px solid var(--sidebar-border);">
-                        <div id="detalhe-barra-progresso" style="height:100%; background:linear-gradient(90deg,var(--verde-destaque),var(--azul-neon)); width:0%;"></div>
-                    </div>
-                </div>
-
-                <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-bottom:16px;">
-                    <div style="background:var(--gray-soft); border:1px solid var(--sidebar-border); border-radius:12px; padding:14px;">
-                        <span style="font-size:11px; color:var(--text-secondary); text-transform:uppercase; font-weight:600; display:block;">Valor Original</span>
-                        <strong id="detalhe-val-original" class="monetario" style="font-size:18px; color:#fff;">R$ 0,00</strong>
-                    </div>
-                    <div style="background:var(--gray-soft); border:1px solid var(--sidebar-border); border-radius:12px; padding:14px;">
-                        <span style="font-size:11px; color:var(--text-secondary); text-transform:uppercase; font-weight:600; display:block;">Saldo Devedor</span>
-                        <strong id="detalhe-val-devedor" class="monetario" style="font-size:18px; color:var(--red-main);">R$ 0,00</strong>
-                    </div>
-                </div>
-
-                <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-bottom:20px;">
-                    <div style="background:var(--gray-soft); border:1px solid var(--sidebar-border); border-radius:12px; padding:14px;">
-                        <span style="font-size:11px; color:var(--text-secondary); text-transform:uppercase; font-weight:600; display:block;">Total Pago</span>
-                        <strong id="detalhe-val-pago" class="monetario" style="font-size:18px; color:var(--verde-destaque);">R$ 0,00</strong>
-                    </div>
-                    <div style="background:var(--gray-soft); border:1px solid var(--sidebar-border); border-radius:12px; padding:14px;">
-                        <span style="font-size:11px; color:var(--text-secondary); text-transform:uppercase; font-weight:600; display:block;">Juros Pagos</span>
-                        <strong id="detalhe-val-juros" class="monetario" style="font-size:18px; color:#f59e0b;">R$ 0,00</strong>
-                    </div>
-                </div>
-
-                <div style="display:flex; justify-content:space-between; align-items:center; font-size:13px; color:var(--text-secondary); margin-bottom:20px; background:var(--gray-soft); padding:10px 14px; border-radius:10px;">
-                    <span>Parcelas: <strong id="detalhe-info-parcelas" style="color:#fff;">0/0</strong></span>
-                    <span>Tipo: <strong id="detalhe-info-tipo" style="color:#fff;">Financiamento</strong></span>
-                </div>
-
-                <div style="display:flex; gap:10px;">
-                    <button type="button" class="btn-modal-submit" style="background:var(--gray-soft); color:#fff; border:1px solid var(--sidebar-border);" onclick="abrirSimuladorQuitacao()"><i class="fa-solid fa-calculator" style="color:var(--verde-destaque);"></i> Simular Quitação</button>
-                    <button type="button" class="btn-modal-submit" style="background:var(--gray-soft); color:#fff; border:1px solid var(--sidebar-border);" onclick="abrirAlterarVencimento()"><i class="fa-regular fa-calendar-days" style="color:var(--azul-neon);"></i> Alterar vencimento</button>
-                    <button type="button" class="btn-action-table btn-delete" style="background:var(--red-soft); padding:10px 16px; border-radius:12px; color:var(--red-main);" onclick="excluirDividaAtual()"><i class="fa-solid fa-trash"></i></button>
-                </div>
-            </div>
-
-            <!-- CONTEÚDO PARCELAS -->
-            <div id="divida-conteudo-parcelas" style="display: none;">
-                <div class="table-container" style="max-height: 340px; overflow-y: auto;">
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>Nº</th>
-                                <th>Vencimento</th>
-                                <th>Status</th>
-                                <th>Valor</th>
-                            </tr>
-                        </thead>
-                        <tbody id="tabela-parcelas-detalhe"></tbody>
-                    </table>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- MODAL SIMULADOR DE QUITAÇÃO -->
-    <div class="modal-overlay" id="modal-simulador-quitacao">
-        <div class="modal-container" style="max-width: 480px;">
-            <div class="modal-header">
-                <div>
-                    <h3><i class="fa-solid fa-calculator" style="color:var(--verde-destaque);"></i> Simulador de Quitação</h3>
-                    <p id="simulador-sub-titulo" style="font-size:12px; color:var(--text-secondary); margin-top:2px;">Financiamento carro - Saldo: R$ 0,00</p>
-                </div>
-                <button type="button" class="btn-close-modal" onclick="fecharModal('modal-simulador-quitacao')"><i class="fa-solid fa-xmark"></i></button>
-            </div>
-
-            <div style="display:grid; grid-template-columns:1fr 1fr; background:var(--gray-soft); padding:4px; border-radius:12px; margin-bottom:18px;">
-                <button type="button" class="tab-btn active receita" id="btn-sim-extra" onclick="alternarModoSimulacao('extra')">Pagamento Extra</button>
-                <button type="button" class="tab-btn despesa" id="btn-sim-quitar" onclick="alternarModoSimulacao('quitar')">Quitar Tudo</button>
-            </div>
-
-            <div id="sim-container-extra">
-                <div class="modal-form-group">
-                    <label>Valor do pagamento extra</label>
-                    <input type="text" id="sim-valor-extra" class="modal-input" placeholder="R$ 0,00" style="padding-left:14px;" oninput="mascaraMoeda(event)">
-                </div>
-                <button type="button" class="btn-modal-submit" onclick="executarSimulacao('extra')"><i class="fa-solid fa-play"></i> Simular</button>
-            </div>
-
-            <div id="sim-container-quitar" style="display: none;">
-                <div style="text-align:center; padding:15px; background:var(--gray-soft); border-radius:12px; margin-bottom:16px;">
-                    <span style="font-size:12px; color:var(--text-secondary);">Valor para quitar hoje</span>
-                    <strong id="sim-val-quitar-todo" class="monetario" style="font-size:22px; color:var(--verde-destaque); display:block; margin-top:4px;">R$ 0,00</strong>
-                    <span style="font-size:11px; color:#34d399;">Sem juros futuros</span>
-                </div>
-                <button type="button" class="btn-modal-submit" onclick="executarSimulacao('quitar')"><i class="fa-solid fa-check"></i> Ver Economia</button>
-            </div>
-
-            <div id="sim-resultado-box" class="resultado-simulacao-card" style="display: none;">
-                <div class="resultado-title"><i class="fa-solid fa-star"></i> Resultado da Simulação</div>
-                <div class="resultado-grid">
-                    <div class="resultado-item">
-                        <span>Economia em juros</span>
-                        <strong style="color:var(--verde-destaque)" id="sim-res-juros">R$ 0,00</strong>
-                    </div>
-                    <div class="resultado-item">
-                        <span>Parcelas economizadas</span>
-                        <strong style="color:var(--azul-neon)" id="sim-res-parcelas">0 parcelas</strong>
-                    </div>
-                </div>
-                <p style="font-size:11px; color:var(--text-secondary); margin-top:10px;">⚠️ É apenas uma simulação. Nenhum dado foi alterado.</p>
-            </div>
-        </div>
-    </div>
-
-    <!-- MODAL ALTERAR VENCIMENTO -->
-    <div class="modal-overlay" id="modal-alterar-vencimento">
-        <div class="modal-container" style="max-width: 420px;">
-            <div class="modal-header">
-                <h3><i class="fa-regular fa-calendar-days" style="color:var(--azul-neon);"></i> Alterar dia de vencimento</h3>
-                <button type="button" class="btn-close-modal" onclick="fecharModal('modal-alterar-vencimento')"><i class="fa-solid fa-xmark"></i></button>
-            </div>
-            <div class="modal-form-group">
-                <label>Novo dia do mês (1-31)</label>
-                <input type="number" min="1" max="31" id="novo-dia-vencimento-input" class="modal-input" placeholder="Ex: 10" style="padding-left:14px;" required>
-            </div>
-            <p style="font-size:11px; color:var(--text-secondary); margin-bottom:16px; line-height:1.4;">Apenas as próximas parcelas (não pagas) serão alteradas. O histórico de pagamentos permanece intacto.</p>
-            <div style="display:flex; gap:10px;">
-                <button type="button" class="btn-modal-submit" style="background:var(--gray-soft); color:#fff; border:1px solid var(--sidebar-border);" onclick="fecharModal('modal-alterar-vencimento')">Cancelar</button>
-                <button type="button" class="btn-modal-submit" onclick="confirmarAlterarVencimento()">Confirmar</button>
-            </div>
         </div>
     </div>
 
@@ -1472,7 +1313,7 @@
         </div>
     </div>
 
-    <!-- JAVASCRIPT INTEGRADO AO SUPABASE E MÓDULO DE DÍVIDAS -->
+    <!-- JAVASCRIPT DO SISTEMA -->
     <script>
         const SUPABASE_URL = 'https://ztjrjtplgwffsofhtone.supabase.co';
         const SUPABASE_ANON_KEY = 'sb_publishable_-Y2ysHQmhUbhh2J-T8W-7A_hgLd-YYV';
@@ -1496,7 +1337,6 @@
         let transacoesProcessadasPDFTemp = [];
         let valoresOcultos = false;
         let tipoDividaSelecionadoPasso1 = "Financiamento";
-        let dividaAtualSelecionadaId = null;
 
         let chartInstance = null;
         let chartGfxReceitasInstance = null;
@@ -1543,29 +1383,6 @@
                 document.getElementById('transacao-data').value = new Date().toISOString().split('T')[0];
                 document.getElementById('gasto-data').value = new Date().toISOString().split('T')[0];
                 document.getElementById('divida-data-modal').value = new Date().toISOString().split('T')[0];
-
-                window.addEventListener('keydown', (e) => {
-                    const modalCalc = document.getElementById('modal-calculadora');
-                    if (!modalCalc.classList.contains('active')) return;
-
-                    if ((e.key >= '0' && e.key <= '9') || e.key === '.') {
-                        calcAddNum(e.key === '.' ? ',' : e.key);
-                    } else if (['+', '-', '*', '/'].includes(e.key)) {
-                        calcOp(e.key);
-                    } else if (e.key === 'Enter' || e.key === '=') {
-                        e.preventDefault();
-                        calcResult();
-                    } else if (e.key === 'Escape' || e.key === 'c' || e.key === 'C') {
-                        calcClear();
-                    } else if (e.key === 'Backspace') {
-                        if (calcValorAtualStr.length > 1) {
-                            calcValorAtualStr = calcValorAtualStr.slice(0, -1);
-                        } else {
-                            calcValorAtualStr = "0";
-                        }
-                        atualizarDisplayCalculadora();
-                    }
-                });
 
             } catch (err) {
                 console.error("Erro na inicialização:", err);
@@ -1990,7 +1807,6 @@
             renderizarInvestimentos();
         }
 
-        /* --- LÓGICA COMPLETA DO MÓDULO DE DÍVIDAS --- */
         function abrirModalNovaDividaPasso1() {
             document.getElementById('modal-nova-divida-passo1').classList.add('active');
         }
@@ -2054,23 +1870,6 @@
             }
         }
 
-        async function excluirDivida(id) {
-            const { error } = await supabaseClient.from('dividas').delete().eq('id', id).eq('user_id', currentUser.id);
-            if (!error) {
-                dividas = dividas.filter(d => d.id !== id);
-                renderizarDividas();
-            }
-        }
-
-        function excluirDividaAtual() {
-            if (dividaAtualSelecionadaId) {
-                if (confirm('Deseja realmente excluir esta dívida?')) {
-                    excluirDivida(dividaAtualSelecionadaId);
-                    fecharModal('modal-detalhes-divida');
-                }
-            }
-        }
-
         function renderizarDividas() {
             const container = document.getElementById('dividas-container');
             container.innerHTML = '';
@@ -2084,7 +1883,7 @@
                     <div style="background:var(--sidebar-bg); border:1px dashed var(--sidebar-border); border-radius:var(--radius-lg); padding:48px 24px; text-align:center; margin-top:10px;">
                         <i class="fa-solid fa-building-columns" style="font-size:36px; color:var(--verde-destaque); margin-bottom:16px;"></i>
                         <h3 style="font-size:18px; font-weight:700; color:#fff; margin-bottom:8px;">Nenhuma dívida cadastrada</h3>
-                        <p style="font-size:14px; color:#94a3b8; max-width:460px; margin: 0 auto 24px;">Registre empréstimos, financiamentos ou parcelamentos com faixa de juros e prazos.</p>
+                        <p style="font-size:14px; color:#94a3b8; max-width:460px; margin: 0 auto 24px;">Registre empréstimos, financiamentos ou parcelamentos.</p>
                         <button type="button" class="btn-cadastrar-primeira-divida" onclick="abrirModalNovaDividaPasso1()">+ Cadastrar Dívida</button>
                     </div>
                 `;
@@ -2116,16 +1915,13 @@
                         proximoVencimentoTexto = `${dtBase.toLocaleDateString('pt-BR')} - ${formatarMoeda(vP)}`;
                     }
 
-                    let iconeTipo = d.tipo === 'Cartão Parcelado' ? '<i class="fa-solid fa-credit-card" style="color:#c084fc"></i>' : d.tipo === 'Consórcio' ? '<i class="fa-solid fa-file-invoice-dollar" style="color:#f59e0b"></i>' : '<i class="fa-solid fa-house-chimney" style="color:var(--verde-destaque)"></i>';
-
                     const card = document.createElement('div');
                     card.className = 'divida-card-moderno';
-                    card.onclick = () => abrirDetalhesDivida(d.id);
                     card.innerHTML = `
                         <div style="display:flex; justify-content:space-between; align-items:flex-start;">
                             <div>
                                 <span style="font-size:11px; font-weight:700; color:var(--text-secondary); text-transform:uppercase;">${d.credor || 'Instituição'}</span>
-                                <h3 style="font-size:16px; font-weight:800; color:#fff; display:flex; align-items:center; gap:8px; margin-top:2px;">${iconeTipo} ${d.titulo}</h3>
+                                <h3 style="font-size:16px; font-weight:800; color:#fff; display:flex; align-items:center; gap:8px; margin-top:2px;">${d.titulo}</h3>
                             </div>
                             <span class="badge-table in" style="font-size:11px;">${d.tipo || 'Financiamento'}</span>
                         </div>
@@ -2148,10 +1944,6 @@
                                 <div style="height:100%; background:linear-gradient(90deg,var(--verde-destaque),var(--azul-neon)); width:${progresso}%;"></div>
                             </div>
                         </div>
-                        <div style="display:flex; justify-content:space-between; font-size:11px; color:var(--text-secondary); border-top:1px solid var(--sidebar-border); padding-top:10px; margin-top:4px;">
-                            <span>${pagas}/${numP} parcelas</span>
-                            <span style="color:var(--azul-neon);">Próx: ${dtBase.toLocaleDateString('pt-BR')} - ${formatarMoeda(vP)}</span>
-                        </div>
                     `;
                     grid.appendChild(card);
                 });
@@ -2168,166 +1960,7 @@
             document.getElementById('divida-progresso-geral-pct').innerText = progressoGeral + '%';
             document.getElementById('divida-proximo-vencimento-txt').innerHTML = `Próxima parcela: <strong>${proximoVencimentoTexto}</strong>`;
             document.getElementById('divida-livre-txt').innerText = `Livre de dívidas em: ${menorDataVenc ? nomesMesesCapital[menorDataVenc.getMonth()] + '/' + menorDataVenc.getFullYear() : '--'}`;
-
-            if (dividas.length > 0 && menorDataVenc) {
-                let diffD = Math.ceil((menorDataVenc - new Date()) / (1000 * 60 * 60 * 24));
-                if (diffD >= 0 && diffD <= 7) {
-                    document.getElementById('container-alerta-prox-7-dias').innerHTML = `
-                        <div class="alerta-vencimento-box">
-                            <i class="fa-solid fa-triangle-exclamation"></i>
-                            <div>1 parcela vence nos próximos 7 dias (${menorDataVenc.toLocaleDateString('pt-BR')})!</div>
-                        </div>
-                    `;
-                } else {
-                    document.getElementById('container-alerta-prox-7-dias').innerHTML = '';
-                }
-            } else {
-                document.getElementById('container-alerta-prox-7-dias').innerHTML = '';
-            }
         }
-
-        function abrirDetalhesDivida(id) {
-            dividaAtualSelecionadaId = id;
-            const d = dividas.find(item => item.id === id);
-            if (!d) return;
-
-            document.getElementById('detalhe-divida-titulo').innerText = d.titulo;
-            document.getElementById('detalhe-divida-credor').innerText = d.credor || 'Instituição';
-
-            let totalOrig = d.valor_total || 0;
-            let numP = d.num_parcelas || 1;
-            let vP = d.valor_parcela || 0;
-            let pagas = d.parcelas_pagas || 0;
-            let valorPagoDesta = pagas * vP;
-            let saldoDev = Math.max(0, totalOrig - valorPagoDesta);
-            let progresso = Math.min(100, Math.round((pagas / numP) * 100)) || 0;
-
-            document.getElementById('detalhe-progresso-pct').innerText = progresso + '%';
-            document.getElementById('detalhe-barra-progresso').style.width = progresso + '%';
-            document.getElementById('detalhe-val-original').innerText = formatarMoeda(totalOrig);
-            document.getElementById('detalhe-val-devedor').innerText = formatarMoeda(saldoDev);
-            document.getElementById('detalhe-val-pago').innerText = formatarMoeda(valorPagoDesta);
-            document.getElementById('detalhe-val-juros').innerText = formatarMoeda((d.taxas || 0) * pagas);
-            document.getElementById('detalhe-info-parcelas').innerText = `${pagas}/${numP}`;
-            document.getElementById('detalhe-info-tipo').innerText = d.tipo || 'Financiamento';
-
-            let dtBase = new Date(d.data_inicio + 'T00:00:00');
-            const tbody = document.getElementById('tabela-parcelas-detalhe');
-            tbody.innerHTML = '';
-            for (let i = 1; i <= numP; i++) {
-                let statusP = i <= pagas ? 'Paga' : 'Pendente';
-                let badgeClass = i <= pagas ? 'badge-table in' : 'badge-status pendente';
-                tbody.innerHTML += `
-                    <tr>
-                        <td><strong>#${i}</strong></td>
-                        <td>${dtBase.toLocaleDateString('pt-BR')}</td>
-                        <td><span class="${badgeClass}">${statusP}</span></td>
-                        <td class="monetario" style="font-weight:700;">${formatarMoeda(vP)}</td>
-                    </tr>
-                `;
-                dtBase.setMonth(dtBase.getMonth() + 1);
-            }
-
-            trocarAbaModalDivida('resumo');
-            document.getElementById('modal-detalhes-divida').classList.add('active');
-        }
-
-        function trocarAbaModalDivida(aba) {
-            const btnRes = document.getElementById('btn-tab-resumo-divida');
-            const btnPar = document.getElementById('btn-tab-parcelas-divida');
-            const contRes = document.getElementById('divida-conteudo-resumo');
-            const contPar = document.getElementById('divida-conteudo-parcelas');
-
-            if (aba === 'resumo') {
-                btnRes.className = 'tab-btn active receita';
-                btnPar.className = 'tab-btn despesa';
-                contRes.style.display = 'block';
-                contPar.style.display = 'none';
-            } else {
-                btnRes.className = 'tab-btn receita';
-                btnPar.className = 'tab-btn active despesa';
-                contRes.style.display = 'none';
-                contPar.style.display = 'block';
-            }
-        }
-
-        function abrirSimuladorQuitacao() {
-            const d = dividas.find(item => item.id === dividaAtualSelecionadaId);
-            if (!d) return;
-            let saldoDev = Math.max(0, (d.valor_total || 0) - ((d.parcelas_pagas || 0) * (d.valor_parcela || 0)));
-            document.getElementById('simulador-sub-titulo').innerText = `${d.titulo} - Saldo: ${formatarMoeda(saldoDev)}`;
-            document.getElementById('sim-val-quitar-todo').innerText = formatarMoeda(saldoDev);
-            document.getElementById('sim-resultado-box').style.display = 'none';
-            document.getElementById('modal-simulador-quitacao').classList.add('active');
-        }
-
-        function alternarModoSimulacao(modo) {
-            const btnExt = document.getElementById('btn-sim-extra');
-            const btnQui = document.getElementById('btn-sim-quitar');
-            const contExt = document.getElementById('sim-container-extra');
-            const contQui = document.getElementById('sim-container-quitar');
-
-            if (modo === 'extra') {
-                btnExt.className = 'tab-btn active receita';
-                btnQui.className = 'tab-btn despesa';
-                contExt.style.display = 'block';
-                contQui.style.display = 'none';
-            } else {
-                btnExt.className = 'tab-btn receita';
-                btnQui.className = 'tab-btn active despesa';
-                contExt.style.display = 'none';
-                contQui.style.display = 'block';
-            }
-            document.getElementById('sim-resultado-box').style.display = 'none';
-        }
-
-        function executarSimulacao(modo) {
-            const d = dividas.find(item => item.id === dividaAtualSelecionadaId);
-            if (!d) return;
-            let vP = d.valor_parcela || 1;
-            let numP = d.num_parcelas || 1;
-            let pagas = d.parcelas_pagas || 0;
-            let parcelasRestantes = numP - pagas;
-
-            let economiaJuros = 0, parcelasEcon = 0;
-            if (modo === 'extra') {
-                let valExtra = converterMoedaParaNumero(document.getElementById('sim-valor-extra').value);
-                parcelasEcon = Math.min(parcelasRestantes, Math.floor(valExtra / vP));
-                economiaJuros = parcelasEcon * (vP * 0.15);
-            } else {
-                parcelasEcon = parcelasRestantes;
-                economiaJuros = parcelasRestantes * (vP * 0.2);
-            }
-
-            document.getElementById('sim-res-juros').innerText = formatarMoeda(economiaJuros);
-            document.getElementById('sim-res-parcelas').innerText = `${parcelasEcon} parcelas`;
-            document.getElementById('sim-resultado-box').style.display = 'block';
-        }
-
-        function abrirAlterarVencimento() {
-            document.getElementById('novo-dia-vencimento-input').value = '';
-            document.getElementById('modal-alterar-vencimento').classList.add('active');
-        }
-
-        async function confirmarAlterarVencimento() {
-            let novoDia = parseInt(document.getElementById('novo-dia-vencimento-input').value);
-            if (!novoDia || novoDia < 1 || novoDia > 31) { alert('Insira um dia válido entre 1 e 31.'); return; }
-
-            const d = dividas.find(item => item.id === dividaAtualSelecionadaId);
-            if (d) {
-                let dt = new Date(d.data_inicio + 'T00:00:00');
-                dt.setDate(novoDia);
-                let novaDataStr = dt.toISOString().split('T')[0];
-
-                await supabaseClient.from('dividas').update({ data_inicio: novaDataStr }).eq('id', d.id).eq('user_id', currentUser.id);
-                d.data_inicio = novaDataStr;
-                fecharModal('modal-alterar-vencimento');
-                fecharModal('modal-detalhes-divida');
-                renderizarDividas();
-                alert('Dia de vencimento alterado com sucesso!');
-            }
-        }
-        /* --- FIM DA LÓGICA DE DÍVIDAS --- */
 
         function abrirModalOrcamentos() {
             const container = document.getElementById('lista-inputs-orcamentos');
@@ -2377,7 +2010,6 @@
         }
 
         function abrirModalCalculadora() { document.getElementById('modal-calculadora').classList.add('active'); }
-        function abrirModalIndependencia() { document.getElementById('modal-independencia').classList.add('active'); }
 
         let calcValorAtualStr = "0", calcExpressaoTokens = [], calcProximaLimpar = false;
         function formatarNumeroCalculadora(num) { return (parseInt(num, 10) / 100).toLocaleString('pt-BR', { minimumFractionDigits: 2 }); }
@@ -2436,8 +2068,7 @@
         }
 
         async function resetarPainelCompleto() {
-            if (!confirm('ATENÇÃO: Deseja realmente resetar e limpar todos os dados do painel? Esta ação removerá transações, cartões, dívidas e investimentos salvos.')) return;
-            
+            if (!confirm('ATENÇÃO: Deseja realmente resetar e limpar todos os dados do painel?')) return;
             try {
                 await supabaseClient.from('transacoes').delete().eq('user_id', currentUser.id);
                 await supabaseClient.from('gastos_cartoes').delete().eq('user_id', currentUser.id);
@@ -2448,10 +2079,7 @@
                 localStorage.removeItem('financas_mil_orcamento_' + currentUser.id);
                 localStorage.removeItem('financas_mil_notas_' + currentUser.id);
 
-                lancamentos = [];
-                cartoes = [];
-                gastosCartoes = [];
-                dividas = [];
+                lancamentos = []; cartoes = []; gastosCartoes = []; dividas = [];
                 investDados = { dinheiroInvestido: 0, rendimentos: 0 };
                 orcamentosMetas = {};
 
@@ -2465,7 +2093,6 @@
                 alert('Painel limpo e resetado com sucesso!');
             } catch (err) {
                 console.error(err);
-                alert('Erro ao resetar painel.');
             }
         }
 
